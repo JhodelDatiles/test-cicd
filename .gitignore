@@ -122,3 +122,5 @@ DerivedData/
 *.7z
 *.sqlite
 *.db
+repomix-output.xml
+repomix-output.txt

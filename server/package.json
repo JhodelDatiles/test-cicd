@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.ts"
+    "start": "tsx src/server.ts"
   },
   "keywords": [],
   "author": "",
@@ -31,5 +31,8 @@
     "@types/node": "^26.1.2",
     "tsx": "^4.23.10",
     "typescript": "^7.0.2"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

@@ -11,8 +11,8 @@ const REFRESH_COOKIE_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 // attributes (sameSite, secure, path) mean the browser won't clear the cookie
 const cookieOptions = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "strict" as const,
+  secure: config.isProduction,
+  sameSite: "none" as const,
   path: "/",
 };
 
