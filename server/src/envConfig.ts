@@ -27,11 +27,11 @@ export const config = {
     "REFRESH_TOKEN_EXPIRES_IN",
     "7d",
   ) as SignOptions["expiresIn"],
-  clientUrl: isProduction
-    ? process.env.CLIENT_URL_PROD
-    : "http://localhost:5173",
+  serverUrl: isProduction ? getEnvVar("SERVER_URL_PROD") : "http://localhost:3143",
+  clientUrl: isProduction ? getEnvVar("CLIENT_URL_PROD") : "http://localhost:5173",
 };
 
-// console.log(`-----------------------------------`);
-// console.log(`port: ${config.port}`);
-// console.log(`-----------------------------------`);
+console.log(`-----------------------------------`);
+console.log(`server prod url: ${config.serverUrl}`);
+console.log(`client prod url: ${config.clientUrl}`);
+console.log(`-----------------------------------`);
