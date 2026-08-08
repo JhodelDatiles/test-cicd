@@ -2,7 +2,11 @@ import { type Request, type Response, type NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { config } from "../envConfig.js";
 
-export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
+export const verifyToken = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -17,7 +21,11 @@ export const verifyToken = (req: Request, res: Response, next: NextFunction) => 
     }
 
     const decoded = jwt.verify(token, config.accessTokenSecret);
-    if (typeof decoded === "string" || !("id" in decoded) || !("role" in decoded)) {
+    if (
+      typeof decoded === "string" ||
+      !("id" in decoded) ||
+      !("role" in decoded)
+    ) {
       res.status(401).json({ error: "Invalid token payload" });
       return;
     }

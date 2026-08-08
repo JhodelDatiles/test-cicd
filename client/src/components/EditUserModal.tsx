@@ -20,10 +20,22 @@ const EditUserModal = ({ user, onClose, onUpdated }: EditUserModalProps) => {
   }, [user]);
 
   return (
-    <dialog ref={dialogRef} className="modal" onClose={onClose} data-testid="edit-user-modal">
+    <dialog
+      ref={dialogRef}
+      className="modal"
+      onClose={onClose}
+      data-testid="edit-user-modal"
+    >
       <div className="modal-box">
         <h3 className="mb-4 text-lg font-semibold">Edit user</h3>
-        {user && <EditUserForm key={user._id} user={user} onClose={onClose} onUpdated={onUpdated} />}
+        {user && (
+          <EditUserForm
+            key={user._id}
+            user={user}
+            onClose={onClose}
+            onUpdated={onUpdated}
+          />
+        )}
       </div>
       <form method="dialog" className="modal-backdrop">
         <button>close</button>
