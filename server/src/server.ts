@@ -7,9 +7,7 @@ import crudRoutes from "./routes/crudRoutes.ts";
 import authRoutes from "./routes/authRoutes.ts";
 
 const app = express();
-const allowedOrigins = [
-  config.clientUrl
-].filter(Boolean);
+const allowedOrigins = [config.clientUrl].filter(Boolean);
 
 //Middlewares
 app.use(express.json()); // Body-parser

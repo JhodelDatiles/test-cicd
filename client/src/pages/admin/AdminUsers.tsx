@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { fetchUsers, type AdminUser } from "../../lib/api";
+import EditUserModal from "../../components/EditUserModal";
 
 const AdminUsers = () => {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
 
   useEffect(() => {
     fetchUsers()
@@ -12,6 +14,10 @@ const AdminUsers = () => {
       .catch((err) => setError(err instanceof Error ? err.message : "Failed to load users"))
       .finally(() => setIsLoading(false));
   }, []);
+
+  const handleUpdated = (updated: AdminUser) => {
+    setUsers((prev) => prev.map((u) => (u._id === updated._id ? updated : u)));
+  };
 
   return (
     <div>
@@ -22,7 +28,7 @@ const AdminUsers = () => {
 
       {!isLoading && !error && (
         <div className="overflow-x-auto">
-          <table className="table table-zebra">
+          <table className="table table-zebra" data-testid="admin-users-table">
             <thead>
               <tr>
                 <th>First name</th>
@@ -34,7 +40,12 @@ const AdminUsers = () => {
             </thead>
             <tbody>
               {users.map((u) => (
-                <tr key={u._id}>
+                <tr
+                  key={u._id}
+                  data-testid={`admin-user-row-${u._id}`}
+                  className="cursor-pointer hover"
+                  onClick={() => setSelectedUser(u)}
+                >
                   <td className="capitalize">{u.firstName}</td>
                   <td className="capitalize">{u.lastName}</td>
                   <td>{u.email}</td>
@@ -54,6 +65,8 @@ const AdminUsers = () => {
           )}
         </div>
       )}
+
+      <EditUserModal user={selectedUser} onClose={() => setSelectedUser(null)} onUpdated={handleUpdated} />
     </div>
   );
 };
