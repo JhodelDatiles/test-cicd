@@ -56,7 +56,7 @@ export const registerUser = async (req: Request, res: Response) => {
     const refreshToken = generateRefreshToken(user._id.toString());
 
     user.refreshToken = await bcrypt.hash(refreshToken, 10);
-    await user.save();
+    await user.save({ validateModifiedOnly: true });
 
     setRefreshCookie(res, refreshToken);
     res.status(201).json({
@@ -94,7 +94,7 @@ export const loginUser = async (req: Request, res: Response) => {
     const refreshToken = generateRefreshToken(user._id.toString());
 
     user.refreshToken = await bcrypt.hash(refreshToken, 10);
-    await user.save();
+    await user.save({ validateModifiedOnly: true });
 
     setRefreshCookie(res, refreshToken);
     res.status(200).json({
