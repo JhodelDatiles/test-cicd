@@ -1,0 +1,40 @@
+name: Client Tests
+on:
+  push:
+    branches: [main]
+    paths: ["client/**", "server/**"]
+  pull_request:
+    branches: [main]
+    paths: ["client/**", "server/**"]
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - run: npm ci
+      - run: npx playwright install --with-deps
+      - name: Start backend server
+        working-directory: server
+        run: |
+          npm ci
+          npm run dev &
+          npx wait-on http://localhost:3143 -t 30000
+        env:
+          PORT: 3143
+          MONGO_URI: ${{ secrets.MONGO_URI_TEST }}
+          ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
+          REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: client/playwright-report/
+          retention-days: 30

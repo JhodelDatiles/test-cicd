@@ -1,0 +1,21 @@
+name: Server Build
+on:
+  push:
+    branches: [main]
+    paths: ["server/**"]
+  pull_request:
+    branches: [main]
+    paths: ["server/**"]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - run: npm ci
+      - run: npm run build
