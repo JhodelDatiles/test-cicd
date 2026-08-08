@@ -16,7 +16,7 @@ const isProduction = process.env.NODE_ENV === "production";
 export const config = {
   isProduction,
   port: Number(getEnvVar("PORT")),
-  db: getEnvVar("MONGO_URI"),
+  db: isProduction ? getEnvVar("MONGO_URI") : getEnvVar("MONGO_URI_TEST"),
   accessTokenSecret: getEnvVar("ACCESS_TOKEN_SECRET"),
   refreshTokenSecret: getEnvVar("REFRESH_TOKEN_SECRET"),
   accessTokenExpiresIn: getEnvVar(
@@ -32,6 +32,7 @@ export const config = {
 };
 
 console.log(`-----------------------------------`);
+// console.log(`DB: ${config.db}`)
 console.log(`server prod url: ${config.serverUrl}`);
 console.log(`client prod url: ${config.clientUrl}`);
 console.log(`-----------------------------------`);
