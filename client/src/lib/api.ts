@@ -84,3 +84,7 @@ export const updateUserById = async (id: string, payload: UpdateUserPayload) => 
   const { data } = await apiClient.patch<AdminUser>(`/crud/users/${id}`, payload);
   return data;
 };
+
+export const logoutUser = async () => {
+  await apiClient.post("/auth/logout");
+};
