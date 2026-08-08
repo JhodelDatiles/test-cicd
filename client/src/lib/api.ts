@@ -50,3 +50,25 @@ export const loginUser = async (payload: LoginPayload) => {
   const { data } = await apiClient.post<AuthResponse>("/auth/login", payload);
   return data;
 };
+
+export interface AdminUser {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: "user" | "admin";
+  createdAt: string;
+}
+
+export const setAuthToken = (token: string | null) => {
+  if (token) {
+    apiClient.defaults.headers.common.Authorization = `Bearer ${token}`;
+  } else {
+    delete apiClient.defaults.headers.common.Authorization;
+  }
+};
+
+export const fetchUsers = async () => {
+  const { data } = await apiClient.get<AdminUser[]>("/crud/users");
+  return data;
+};

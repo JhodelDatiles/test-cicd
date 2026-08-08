@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
 import type { AuthUser } from "../lib/api";
+import { setAuthToken } from "../lib/api";
 import { AuthContext } from "./AuthContext";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -9,11 +10,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const setSession = (nextUser: AuthUser, token: string) => {
     setUser(nextUser);
     setAccessToken(token);
+    setAuthToken(token);
   };
 
   const clearSession = () => {
     setUser(null);
     setAccessToken(null);
+    setAuthToken(null);
   };
 
   return (
