@@ -67,7 +67,7 @@ test.describe("Register E2E (Real Backend)", () => {
     // Verify error display
     await expect(page.getByTestId("register-error")).toBeVisible();
     await expect(page.getByTestId("register-error")).toHaveText(
-      "Email already exists",
+      "Email already exists", 
     );
   });
 });
