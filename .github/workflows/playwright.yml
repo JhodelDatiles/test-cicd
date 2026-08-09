@@ -1,10 +1,13 @@
 name: Client Tests
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 on:
   push:
-    branches: [main, settingUpClient]
+    branches: [main]
     paths: ["client/**", "server/**"]
   pull_request:
-    branches: [main, settingUpClient]
+    branches: [main]
     paths: ["client/**", "server/**"]
 jobs:
   test:

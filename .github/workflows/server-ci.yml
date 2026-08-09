@@ -1,11 +1,14 @@
 name: Server Build
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 on:
   push:
-    branches: [main, settingUpClient]
-    paths: ["server/**"]
+    branches: [main]
+    paths: ["client/**", "server/**"]
   pull_request:
-    branches: [main, settingUpClient]
-    paths: ["server/**"]
+    branches: [main]
+    paths: ["client/**", "server/**"]
 jobs:
   build:
     runs-on: ubuntu-latest
