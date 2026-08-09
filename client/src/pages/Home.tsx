@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { useLogout } from "../hooks/useLogout";
 
@@ -10,6 +11,11 @@ const Home = () => {
       <h1 data-testid="home-welcome" className="text-2xl font-semibold">
         {user ? `Welcome, ${user.email}` : "Welcome"}
       </h1>
+      {user?.role === "admin" && (
+        <Link to="/admin" data-testid="admin-link" className="btn btn-primary">
+          Admin dashboard
+        </Link>
+      )}
       {user && (
         <button data-testid="logout-button" className="btn btn-outline" onClick={handleLogout}>
           Log out

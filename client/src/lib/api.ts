@@ -42,7 +42,10 @@ export interface LoginPayload {
 }
 
 export const registerUser = async (payload: RegisterPayload) => {
-  const { data } = await apiClient.post<AuthResponse>("/auth/register", payload);
+  const { data } = await apiClient.post<AuthResponse>(
+    "/auth/register",
+    payload,
+  );
   return data;
 };
 
@@ -80,11 +83,32 @@ export interface UpdateUserPayload {
   role?: "user" | "admin";
 }
 
-export const updateUserById = async (id: string, payload: UpdateUserPayload) => {
-  const { data } = await apiClient.patch<AdminUser>(`/crud/users/${id}`, payload);
+export const updateUserById = async (
+  id: string,
+  payload: UpdateUserPayload,
+) => {
+  const { data } = await apiClient.patch<AdminUser>(
+    `/crud/users/${id}`,
+    payload,
+  );
   return data;
 };
 
 export const logoutUser = async () => {
   await apiClient.post("/auth/logout");
+};
+
+
+export const deleteUserById = async (id: string) => {
+  await apiClient.delete(`/crud/users/${id}`);
+};
+
+export const refreshAccessToken = async () => {
+  const { data } = await apiClient.post<{ accessToken: string }>("/auth/refresh");
+  return data.accessToken;
+};
+
+export const getMe = async () => {
+  const { data } = await apiClient.get<AuthUser>("/auth/me");
+  return data;
 };

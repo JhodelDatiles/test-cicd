@@ -7,11 +7,16 @@ const AdminUsers = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
+  const handleDeleted = (id: string) => {
+    setUsers((prev) => prev.filter((u) => u._id !== id));
+  };
 
   useEffect(() => {
     fetchUsers()
       .then(setUsers)
-      .catch((err) => setError(err instanceof Error ? err.message : "Failed to load users"))
+      .catch((err) =>
+        setError(err instanceof Error ? err.message : "Failed to load users"),
+      )
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -22,10 +27,8 @@ const AdminUsers = () => {
   return (
     <div>
       <h1 className="mb-4 text-xl font-semibold">Users</h1>
-
       {isLoading && <p className="text-sm opacity-70">Loading users...</p>}
       {error && <p className="text-sm text-error">{error}</p>}
-
       {!isLoading && !error && (
         <div className="overflow-x-auto">
           <table className="table table-zebra" data-testid="admin-users-table">
@@ -50,7 +53,9 @@ const AdminUsers = () => {
                   <td className="capitalize">{u.lastName}</td>
                   <td>{u.email}</td>
                   <td>
-                    <span className={`badge ${u.role === "admin" ? "badge-primary" : "badge-ghost"}`}>
+                    <span
+                      className={`badge ${u.role === "admin" ? "badge-primary" : "badge-ghost"}`}
+                    >
                       {u.role}
                     </span>
                   </td>
@@ -65,8 +70,12 @@ const AdminUsers = () => {
           )}
         </div>
       )}
-
-      <EditUserModal user={selectedUser} onClose={() => setSelectedUser(null)} onUpdated={handleUpdated} />
+      <EditUserModal
+        user={selectedUser}
+        onClose={() => setSelectedUser(null)}
+        onUpdated={handleUpdated}
+        onDeleted={handleDeleted}
+      />{" "}
     </div>
   );
 };

@@ -6,9 +6,15 @@ interface EditUserModalProps {
   user: AdminUser | null;
   onClose: () => void;
   onUpdated: (user: AdminUser) => void;
+  onDeleted: (id: string) => void;
 }
 
-const EditUserModal = ({ user, onClose, onUpdated }: EditUserModalProps) => {
+const EditUserModal = ({
+  user,
+  onClose,
+  onUpdated,
+  onDeleted,
+}: EditUserModalProps) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -34,6 +40,7 @@ const EditUserModal = ({ user, onClose, onUpdated }: EditUserModalProps) => {
             user={user}
             onClose={onClose}
             onUpdated={onUpdated}
+            onDeleted={onDeleted}
           />
         )}
       </div>

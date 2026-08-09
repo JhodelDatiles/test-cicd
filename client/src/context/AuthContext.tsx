@@ -4,6 +4,7 @@ import type { AuthUser } from "../lib/api";
 export interface AuthContextValue {
   user: AuthUser | null;
   accessToken: string | null;
+  isLoading: boolean;
   setSession: (user: AuthUser, accessToken: string) => void;
   clearSession: () => void;
 }
