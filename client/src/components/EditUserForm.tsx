@@ -1,20 +1,28 @@
 import { useState, type FormEvent } from "react";
 import toast from "react-hot-toast";
-import { updateUserById, type AdminUser } from "../lib/api";
+import { updateUserById, deleteUserById, type AdminUser } from "../lib/api";
 
 interface EditUserFormProps {
   user: AdminUser;
   onClose: () => void;
   onUpdated: (user: AdminUser) => void;
+  onDeleted: (id: string) => void;
 }
 
-const EditUserForm = ({ user, onClose, onUpdated }: EditUserFormProps) => {
+const EditUserForm = ({
+  user,
+  onClose,
+  onUpdated,
+  onDeleted,
+}: EditUserFormProps) => {
   const [firstName, setFirstName] = useState(user.firstName);
   const [lastName, setLastName] = useState(user.lastName);
   const [email, setEmail] = useState(user.email);
   const [role, setRole] = useState<"user" | "admin">(user.role);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -34,6 +42,24 @@ const EditUserForm = ({ user, onClose, onUpdated }: EditUserFormProps) => {
       setError(err instanceof Error ? err.message : "Update failed");
     } finally {
       setIsSubmitting(false);
+    }
+  };
+  const handleDelete = async () => {
+    if (!confirmDelete) {
+      setConfirmDelete(true);
+      return;
+    }
+    setError(null);
+    setIsDeleting(true);
+    try {
+      await deleteUserById(user._id);
+      onDeleted(user._id);
+      onClose();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Delete failed");
+      setConfirmDelete(false);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -97,6 +123,19 @@ const EditUserForm = ({ user, onClose, onUpdated }: EditUserFormProps) => {
       )}
 
       <div className="modal-action">
+        <button
+          type="button"
+          data-testid="edit-user-delete"
+          className="btn btn-error btn-outline mr-auto"
+          onClick={handleDelete}
+          disabled={isDeleting}
+        >
+          {isDeleting
+            ? "Deleting..."
+            : confirmDelete
+              ? "Confirm delete"
+              : "Delete user"}
+        </button>
         <button
           type="button"
           data-testid="edit-user-cancel"

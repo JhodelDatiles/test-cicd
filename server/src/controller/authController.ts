@@ -12,7 +12,7 @@ const REFRESH_COOKIE_MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 const cookieOptions = {
   httpOnly: true,
   secure: config.isProduction,
-  sameSite: "none" as const,
+  sameSite: config.isProduction ? ("none" as const) : ("lax" as const),
   path: "/",
 };
 
@@ -169,6 +169,24 @@ export const logoutUser = async (req: Request, res: Response) => {
     }
     res.clearCookie("refreshToken", cookieOptions);
     res.status(200).json({ message: "Logged out" });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    res.status(500).json({ error: message });
+  }
+};
+
+export const getMe = async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      res.status(401).json({ error: "Not authenticated" });
+      return;
+    }
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
+      return;
+    }
+    res.status(200).json({ id: user._id, email: user.email, role: user.role });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     res.status(500).json({ error: message });
